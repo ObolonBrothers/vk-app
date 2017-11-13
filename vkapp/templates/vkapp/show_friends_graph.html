@@ -1,0 +1,53 @@
+<head>
+    <title>VKApp</title>
+    <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600' rel='stylesheet' type='text/css'>
+
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/style.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/button.css' %}" />
+    <link href="{% static 'vkapp/css/bootstrap.css'  %}"   rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/style.css' %}"        rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/responsive.css' %}"   rel="stylesheet" type="text/css">
+</head>
+<body>
+    {% load static %}
+    <script type="text/javascript" src="{% static 'vkapp/js/jquery.1.8.3.min.js' %}"></script>
+    <script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
+
+<nav class="main-nav-outer" id="test"><!--main-nav-start-->
+	<div class="container">
+        <ul class="main-nav">
+        	<li><a href="/vk/scheduledcomments">Scheduled comments</a></li>
+            <li><a href="/vk/findcommonfriends">Common friends</a></li>
+            <li><a href="/vk/friendspath">Shortest friend path</a></li>
+            <li><a href="/vk/home/">Home</a></li>
+            <li><a href="/vk/logout/">Logout</a></li>
+        </ul>
+        <a class="res-nav_click" href="#"><i class="fa-bars"></i></a>
+    </div>
+</nav><!--main-nav-end-->
+
+<div class="main">
+    <div class="home_greeting">
+        <p>Friends graph!</p>
+    </div>
+    <div class="user_details">
+        <div style="float: left">
+            {% if user %}
+                {% if user.photo_200 %}
+                    <div><img src='{{ user.photo_200 }}' alt="Photo" style="width:150px;height:150px;"></div>
+                {% else %}
+                    <div><img src='{{ user.photo_max_orig }}' alt="Photo" style="width:150px;height:150px;"></div>
+                {% endif %}
+                <div>{{ user.first_name }} {{ user.last_name }}</div>
+                <a target="_blank" href="https://vk.com/{{ user.domain  }}">Open vk.com page!</a>
+            {% endif %}
+        </div>
+        <p>Friends graph for {{ user.first_name }} {{ user.last_name }} (<a href="{% static picture_url %}" download>download png</a>) :</p>
+        <div><img class="friends_graph" src="{% static picture_url %}" alt="Graph"></div>
+    <div>
+</div>
+
+</body>
