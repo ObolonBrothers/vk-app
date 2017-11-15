@@ -22,7 +22,7 @@
     	<figure class="logo_ animated fadeInDown delay-07s">
         	<a href="#"><img class="logo_" src="{% static 'vkapp/img/logo.png' %}" alt=""></a>
         </figure>
-        <h1 class="animated fadeInDown delay-07s">Welcome To Sasha-Vasia Studios</h1>
+        <h1 class="animated fadeInDown delay-07s">Welcome To VSY Studios</h1>
         <ul class="we-create animated fadeInUp delay-1s">
         	<li>We want to introduce our new product to you.</li>
         </ul>
@@ -43,7 +43,7 @@
         <p>copy URL from adress line and paste in form below the link. </p>
         <form method="post"> {% csrf_token %}
             <br>
-            <a id="auth-link" target="_blank" href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,messages&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open link!</a>
+            <a id="auth-link" target="_blank" href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,friends,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open link!</a>
             <br><br>
             <p>Enter your vk page details: </p> <br>
             <input type="text" size="60" name="token_url" placeholder='Paste URL'> <br> <br>

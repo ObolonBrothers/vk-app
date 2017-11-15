@@ -8,7 +8,7 @@ import matplotlib
 import pylab
 from threading import Lock
 
-APP_ID = '5757148'
+APP_ID = '6231329'
 
 def get_auth_params_by_url(redirected_url):
     try:

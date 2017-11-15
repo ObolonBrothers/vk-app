@@ -25,7 +25,7 @@ SECRET_KEY = '$fiq4#0$&)1gboyj1bp7@&e0jf0k)9d1-80y-r=h@w80=7gb78'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['192.168.0.2', '127.0.0.1', '192.168.1.189']
+ALLOWED_HOSTS = ['192.168.0.2', '127.0.0.1', '192.168.1.189', '*']
 
 
 # Application definition
