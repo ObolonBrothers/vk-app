@@ -29,11 +29,11 @@
 <nav class="main-nav-outer" id="test"><!--main-nav-start-->
     <div class="container">
         <ul class="main-nav">
-            <li><a href="/vk/findcommonfriends">Common friends</a></li>
-            <li><a href="/vk/friendspath">Shortest friend path</a></li>
-            <li><a href="/vk/friendsgraph">Friends graph</a></li>
-            <li> <a href="/vk/home/">Home</a></li>
-            <li><a href="/vk/logout/">Logout</a></li>
+            <li><a href="/findcommonfriends">Common friends</a></li>
+            <li><a href="/friendspath">Shortest friend path</a></li>
+            <li><a href="/friendsgraph">Friends graph</a></li>
+            <li> <a href="/home/">Home</a></li>
+            <li><a href="/logout/">Logout</a></li>
         </ul>
         <a class="res-nav_click" href="#"><i class="fa-bars"></i></a>
     </div>
@@ -70,7 +70,7 @@
                 </div>
             {% endfor %}
 
-            <form action="/vk/deletecomment/" method="post"> {% csrf_token %}
+            <form action="/deletecomment/" method="post"> {% csrf_token %}
                 <br>
                 ID of comment to delete: <input type="number" name="comment_delete" placeholder='ID'> <br>
                 <br>
@@ -103,7 +103,7 @@
                 <textarea class="input-text text-area" name="comment" cols="0" rows="0" onfocus="if(this.value==this.defaultValue)this.value='';" onblur="if(this.value=='')this.value=this.defaultValue;">Your Message *</textarea>
                 <br>
 
-                <input action="/vk/scheduledcomments/" class="ph-button ph-btn-blue" type="submit" name="group" value='Schedule'>
+                <input action="/scheduledcomments/" class="ph-button ph-btn-blue" type="submit" name="group" value='Schedule'>
             </div>
         </div>
         <br>
