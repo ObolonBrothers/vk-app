@@ -53,7 +53,7 @@ def logout(request):
     request.session['access_token'] = None
     request.session['token_expire'] = None
     request.session['user_id'] = None
-    return HttpResponseRedirect("/vk")
+    return HttpResponseRedirect("/")
 
 
 def find_common_friends(request):
@@ -258,4 +258,4 @@ def delete_comment(request):
         return render(request, "vkapp/view_scheduled_comments.html",
                       {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
     else:
-        return HttpResponseRedirect("/vk/scheduledcomments")
+        return HttpResponseRedirect("/scheduledcomments")

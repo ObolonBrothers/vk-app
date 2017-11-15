@@ -5,6 +5,7 @@ import time
 import requests
 import networkx
 import matplotlib
+matplotlib.use('Agg')
 import pylab
 from threading import Lock
 
