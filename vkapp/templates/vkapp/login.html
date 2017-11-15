@@ -26,50 +26,49 @@
         <ul class="we-create animated fadeInUp delay-1s">
         	<li>We want to introduce our new product to you.</li>
         </ul>
-            <a class="link animated fadeInDownBig delay-05s" href="#welcome">Join us</a>
+            <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome">Join us</a>
     </div>
 </header><!--header-end-->
 
-<div class="main">
-    <div class="greeting" id="welcome">
+<div class="main" id="welcome">
+    <div class="greeting">
         <p>Welcome to Awesome VK App!</p>
     </div>
-</div>
+    <div class = "login_form">
 
-<div class = "login_form">
-
-    <div class="col-lg-6 col-sm-5 fadeInUp delay-05s">
-        <p>First, you need to visit this page to give access to your VK page, </p>
-        <p>copy URL from adress line and paste in form below the link. </p>
-        <form method="post"> {% csrf_token %}
-            <br>
-            <a id="auth-link" target="_blank" href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,friends,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open link!</a>
-            <br><br>
-            <p>Enter your vk page details: </p> <br>
-            <input type="text" size="60" name="token_url" placeholder='Paste URL'> <br> <br>
-             <div class="login_form_error text-center pagination-centered">
-                {% if error_message %}
-                    <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
-                {% endif %}
+        <div class="col-lg-6 col-sm-5 fadeInUp delay-05s">
+            <p>First, you need to visit this page to give access to your VK page, </p>
+            <p>copy URL from adress line and paste in form below the link. </p>
+            <form method="post"> {% csrf_token %}
                 <br>
-            </div>
+                <a id="auth-link" target="_blank" href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,friends,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open link!</a>
+                <br><br>
+                <p>Enter your vk page details: </p> <br>
+                <input type="text" size="60" name="token_url" placeholder='Paste URL'> <br> <br>
+                 <div class="login_form_error text-center pagination-centered">
+                    {% if error_message %}
+                        <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
+                    {% endif %}
+                    <br>
+                </div>
+                <br>
+                <br>
+                <input class="ph-button ph-btn-blue" type="submit" value='Login'>
+            </form>
             <br>
             <br>
-            <input class="ph-button ph-btn-blue" type="submit" value='Login'>
-        </form>
-        <br>
-        <br>
-        <br>
-        <br>
-        <br>
-    </div>
- </div>
- <script>
-      $(document).on('click', 'a', function(event){
-          event.preventDefault();
+            <br>
+            <br>
+            <br>
+        </div>
+     </div>
+</div>
+<script>
+    $(document).on('click', '#animate-scroll', function (event) {
+        event.preventDefault();
         $('html, body').animate({
-           scrollTop: $( $.attr(this, 'href') ).offset().top
+            scrollTop: $($.attr(this, 'href')).offset().top
         }, 650);
-      });
-  </script>
+    });
+</script>
 </body>

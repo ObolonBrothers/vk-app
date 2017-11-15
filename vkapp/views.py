@@ -38,10 +38,13 @@ def login(request):
 
         request.session['access_token'] = access_token
         request.session['user_id'] = user_id
-        expires = datetime.now() + timedelta(seconds=int(expires_in))
+        if expires_in == "0":
+            expires = datetime.now() + timedelta(minutes=43800) # one month
+        else:
+            expires = datetime.now() + timedelta(seconds=int(expires_in))
         request.session['token_expire'] = expires.timestamp()
 
-        return HttpResponseRedirect("/vk")
+        return HttpResponseRedirect("/")
     else:
         return render(request, "vkapp/login.html", {'APP_ID': vkapi.APP_ID})
 
