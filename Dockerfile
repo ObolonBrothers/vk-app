@@ -20,11 +20,11 @@ RUN apt-get install -yq \
 	pkg-config \
 	python3-tk
 
+COPY requirements.txt /project/requirements.txt
+WORKDIR /project
+RUN pip3 install -r requirements.txt
 
 COPY . /project
-WORKDIR /project
-
-RUN pip3 install -r requirements.txt
 
 EXPOSE 8000
 
