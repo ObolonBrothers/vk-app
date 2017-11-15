@@ -22,7 +22,7 @@ def get_auth_params_by_url(redirected_url):
 
 def get_api(access_token):
     session = vk.Session(access_token=access_token)
-    return vk.API(session)
+    return vk.API(session, lang='en')
 
 
 lock = Lock()
