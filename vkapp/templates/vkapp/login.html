@@ -2,15 +2,16 @@
     <title>VKApp</title>
 
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600'
+          rel='stylesheet' type='text/css'>
 
     {% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/button.css' %}" />
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/button.css' %}"/>
 
-    <link href="{% static 'vkapp/css/bootstrap.css'  %}"   rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vkapp/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'vkapp/css/animate.css' %}"      rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/animate.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
 
@@ -18,15 +19,16 @@
 <script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
 
 <header class="header" id="header"><!--header-start-->
-	<div class="container">
-    	<figure class="logo_ animated fadeInDown delay-07s">
-        	<a href="#"><img class="logo_" src="{% static 'vkapp/img/logo.png' %}" alt=""></a>
+    <div class="container">
+        <figure class="logo_ animated fadeInDown delay-07s">
+            <a href="#"><img class="logo_" src="{% static 'vkapp/img/logo.png' %}" alt=""></a>
         </figure>
         <h1 class="animated fadeInDown delay-07s">Welcome To VSY Studios</h1>
         <ul class="we-create animated fadeInUp delay-1s">
-        	<li>We want to introduce our new product to you.</li>
+            <li>We want to introduce our new product to you.</li>
         </ul>
-            <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome">Join us</a>
+        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome">Token</a>
+        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome2">Login/Pass</a>
     </div>
 </header><!--header-end-->
 
@@ -34,25 +36,24 @@
     <div class="greeting">
         <p>Welcome to Awesome VK App!</p>
     </div>
-    <div class = "login_form">
+    <div class="login_form">
 
         <div class="col-lg-6 col-sm-5 fadeInUp delay-05s">
             <p>First, you need to visit this page to give access to your VK page, </p>
             <p>copy URL from adress line and paste in form below the link. </p>
             <form method="post"> {% csrf_token %}
                 <br>
-                <a id="auth-link" target="_blank" href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,friends,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open link!</a>
+                <a id="auth-link" target="_blank"
+                   href="https://oauth.vk.com/authorize?client_id={{ APP_ID }}&scope=wall,friends,offline&redirect_uri=http://oauth.vk.com/blank.html&display=page&response_type=token">Open
+                    link!</a>
                 <br><br>
                 <p>Enter your vk page details: </p> <br>
                 <input type="text" size="60" name="token_url" placeholder='Paste URL'> <br> <br>
-                 <div class="login_form_error text-center pagination-centered">
+                <div class="login_form_error text-center pagination-centered">
                     {% if error_message %}
                         <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
                     {% endif %}
-                    <br>
                 </div>
-                <br>
-                <br>
                 <input class="ph-button ph-btn-blue" type="submit" value='Login'>
             </form>
             <br>
@@ -61,7 +62,39 @@
             <br>
             <br>
         </div>
-     </div>
+    </div>
+</div>
+
+<div class="main" id="welcome2">
+    <div class="greeting">
+        <p>Welcome to Awesome VK App!</p>
+    </div>
+    <div class="login_form">
+
+        <div class="col-lg-6 col-sm-5 fadeInUp delay-05s">
+            <form method="post"> {% csrf_token %}
+                <br>
+                <div class="login_form_error text-center pagination-centered">
+                    {% if error_message %}
+                        <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
+                    {% endif %}
+                </div>
+                <br>
+                <input type="text" size="40" name="vk_login" placeholder='Login'>
+                <input type="password" size="40" name="vk_pass" placeholder='Password'>
+                <br>
+                <br>
+                <input class="ph-button ph-btn-blue" type="submit" value='Login'>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+            </form>
+        </div>
+    </div>
 </div>
 <script>
     $(document).on('click', '#animate-scroll', function (event) {
