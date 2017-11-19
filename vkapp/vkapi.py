@@ -5,11 +5,14 @@ import time
 import requests
 import networkx
 import matplotlib
+
 matplotlib.use('Agg')
 import pylab
 from threading import Lock
 
 APP_ID = '6231329'
+STANDALONE_APP_ID = '6266014'
+
 
 def get_auth_params_by_url(redirected_url):
     try:
@@ -18,6 +21,15 @@ def get_auth_params_by_url(redirected_url):
         return aup['access_token'][0], aup['user_id'][0], aup['expires_in'][0]
     except:
         return None, None, None
+
+
+def get_auth_params_by_login_and_password(login_name, password):
+    try:
+        session = vk.AuthSession(STANDALONE_APP_ID, login_name, password)
+    except:
+        return None, None, None
+    api = vk.API(session, lang='en')
+    return session.get_access_token(), api.users.get()[0]['uid'], '0'
 
 
 def get_api(access_token):
@@ -68,15 +80,6 @@ def get_user(access_token, user_id):
         return None
 
 
-def get_group(access_token, group_id):
-    api = get_api(access_token)
-    try:
-        return invoke_api_request('groups.get', api,
-                                  {'group_id': group_id})[0]
-    except:
-        return None
-
-
 def get_common_friends(access_token, u1_id, u2_id):
     api = get_api(access_token)
     try:
@@ -97,6 +100,15 @@ def get_common_friends(access_token, u1_id, u2_id):
         if friend['user_id'] in f2:
             result.append(friend)
     return users, result
+
+
+def get_group(access_token, group_id):
+    api = get_api(access_token)
+    try:
+        return invoke_api_request('groups.get', api,
+                                  {'group_id': group_id})[0]
+    except:
+        return None
 
 
 def get_all_friends(api, access_token, ids):
@@ -347,7 +359,7 @@ def comment(kill, access_token, group, time_of_publish, comment_text, myid):
     myid = int(myid)
     api = get_api(access_token)
     while not kill.wait(1):
-        if (time_of_publish-datetime.now()).seconds > 30:
+        if (time_of_publish - datetime.now()).seconds > 30:
             time.sleep(30)
         else:
             break
@@ -371,7 +383,8 @@ def comment(kill, access_token, group, time_of_publish, comment_text, myid):
     if not kill.wait(1):
         if post is not None:
             if post['comments']['can_post'] == 1:
-                invoke_api_request('wall.createComment', api, {'owner_id': -group['gid'], 'post_id': post['id'], 'message': comment_text})
+                invoke_api_request('wall.createComment', api,
+                                   {'owner_id': -group['gid'], 'post_id': post['id'], 'message': comment_text})
 
         ri = None
         for i in range(0, len(comment_threads[myid])):

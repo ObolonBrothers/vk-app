@@ -31,7 +31,11 @@ def home(request):
 
 def login(request):
     if request.method == 'POST':
-        access_token, user_id, expires_in = vkapi.get_auth_params_by_url(request.POST['token_url'])
+        if 'token_url' in request.POST:
+            access_token, user_id, expires_in = vkapi.get_auth_params_by_url(request.POST['token_url'])
+        else:
+            access_token, user_id, expires_in = vkapi.get_auth_params_by_login_and_password(
+                request.POST['vk_login'], request.POST['vk_pass'])
         if access_token is None or user_id is None or expires_in is None:
             return render(request, "vkapp/login.html",
                           {'APP_ID': vkapi.APP_ID, 'error_message': 'Login error, try again!'})

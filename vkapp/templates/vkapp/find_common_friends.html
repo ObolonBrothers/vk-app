@@ -1,28 +1,29 @@
 <head>
     <title>VKApp</title>
     <link href='http://fonts.googleapis.com/css?family=Montserrat:400,700' rel='stylesheet' type='text/css'>
-    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600' rel='stylesheet' type='text/css'>
+    <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,300,800italic,700italic,600italic,400italic,300italic,800,700,600'
+          rel='stylesheet' type='text/css'>
 
-{% load static %}
-    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/style.css' %}" />
-    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/button.css' %}" />
-    <link href="{% static 'vkapp/css/bootstrap.css'  %}"   rel="stylesheet" type="text/css">
-    <link href="{% static 'vkapp/css/style.css' %}"        rel="stylesheet" type="text/css">
+    {% load static %}
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/style.css' %}"/>
+    <link rel="stylesheet" type="text/css" href="{% static 'vkapp/button.css' %}"/>
+    <link href="{% static 'vkapp/css/bootstrap.css' %}" rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/style.css' %}" rel="stylesheet" type="text/css">
     <link href="{% static 'vkapp/css/font-awesome.css' %}" rel="stylesheet" type="text/css">
-    <link href="{% static 'vkapp/css/responsive.css' %}"   rel="stylesheet" type="text/css">
+    <link href="{% static 'vkapp/css/responsive.css' %}" rel="stylesheet" type="text/css">
 </head>
 <body>
 {% load static %}
-    <script type="text/javascript" src="{% static 'vkapp/js/jquery.1.8.3.min.js' %}"></script>
-    <script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
+<script type="text/javascript" src="{% static 'vkapp/js/jquery.1.8.3.min.js' %}"></script>
+<script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
 
 <nav class="main-nav-outer" id="test"><!--main-nav-start-->
-	<div class="container">
+    <div class="container">
         <ul class="main-nav">
-        	<li><a href="/scheduledcomments">Scheduled comments</a></li>
+            <li><a href="/scheduledcomments">Scheduled comments</a></li>
             <li><a href="/friendspath">Shortest friend path</a></li>
             <li><a href="/friendsgraph">Friends graph</a></li>
-            <li> <a href="/home/">Home</a></li>
+            <li><a href="/home/">Home</a></li>
             <li><a href="/logout/">Logout</a></li>
         </ul>
         <a class="res-nav_click" href="#"><i class="fa-bars"></i></a>
@@ -36,8 +37,8 @@
         {% else %}
             <div><img src='{{ user.photo_max_orig }}' alt="Photo" style="width:150px;height:150px;"></div>
         {% endif %}
-        <a target="_blank" href="https://vk.com/{{ user.domain  }}">{{ user.first_name }} {{ user.last_name }}</a>
-{#        <a target="_blank" >Open vk.com page!</a>#}
+        <a target="_blank" href="https://vk.com/{{ user.domain }}">{{ user.first_name }} {{ user.last_name }}</a>
+        {#        <a target="_blank" >Open vk.com page!</a>#}
     {% endif %}
     <br>
     <br>
@@ -54,7 +55,7 @@
     </div>
 </div>
 
-<div class = "common_friends_form">
+<div class="common_friends_form">
     <form method="post"> {% csrf_token %}
         Enter links for two accounts. <br><br>
 
