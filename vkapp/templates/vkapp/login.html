@@ -18,7 +18,7 @@
 <script type="text/javascript" src="{% static 'vkapp/js/jquery.1.8.3.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
 
-<header class="header" id="header"><!--header-start-->
+<header class="header" id="header">
     <div class="container">
         <figure class="logo_ animated fadeInDown delay-07s">
             <a href="#"><img class="logo_" src="{% static 'vkapp/img/logo.png' %}" alt=""></a>
@@ -65,7 +65,7 @@
     </div>
 </div>
 
-<div class="main" id="welcome2">
+<div class="main login-full-window" id="welcome2">
     <div class="greeting">
         <p>Welcome to Awesome VK App!</p>
     </div>
@@ -79,19 +79,11 @@
                         <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
                     {% endif %}
                 </div>
-                <br>
-                <input type="text" size="40" name="vk_login" placeholder='Login'>
-                <input type="password" size="40" name="vk_pass" placeholder='Password'>
+                <input type="text" size="30" name="vk_login" placeholder='Login'> <br>
+                <input type="password" size="30" name="vk_pass" placeholder='Password'>
                 <br>
                 <br>
                 <input class="ph-button ph-btn-blue" type="submit" value='Login'>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
-                <br>
             </form>
         </div>
     </div>
