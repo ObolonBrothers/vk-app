@@ -32,13 +32,18 @@ def home(request):
 def login(request):
     if request.method == 'POST':
         if 'token_url' in request.POST:
+            login_type = 'token'
             access_token, user_id, expires_in = vkapi.get_auth_params_by_url(request.POST['token_url'])
         else:
+            login_type = 'logpass'
             access_token, user_id, expires_in = vkapi.get_auth_params_by_login_and_password(
                 request.POST['vk_login'], request.POST['vk_pass'])
+
         if access_token is None or user_id is None or expires_in is None:
-            return render(request, "vkapp/login.html",
-                          {'APP_ID': vkapi.APP_ID, 'error_message': 'Login error, try again!'})
+            return render(request, 'vkapp/login.html',
+                          {'APP_ID': vkapi.APP_ID,
+                           'error_message_' + login_type: 'Login error, try again!',
+                           'opendiv': login_type})
 
         request.session['access_token'] = access_token
         request.session['user_id'] = user_id

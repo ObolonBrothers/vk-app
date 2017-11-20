@@ -18,7 +18,7 @@
 <script type="text/javascript" src="{% static 'vkapp/js/jquery.1.8.3.min.js' %}"></script>
 <script type="text/javascript" src="{% static 'vkapp/js/bootstrap.js' %}"></script>
 
-<header class="header" id="header">
+<header class="header login-full-window" id="header">
     <div class="container">
         <figure class="logo_ animated fadeInDown delay-07s">
             <a href="#"><img class="logo_" src="{% static 'vkapp/img/logo.png' %}" alt=""></a>
@@ -27,12 +27,12 @@
         <ul class="we-create animated fadeInUp delay-1s">
             <li>We want to introduce our new product to you.</li>
         </ul>
-        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome">Token</a>
-        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#welcome2">Login/Pass</a>
+        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#token">Token</a>
+        <a class="link animated fadeInDownBig delay-05s" id="animate-scroll" href="#logpass">Login/Pass</a>
     </div>
-</header><!--header-end-->
+</header>
 
-<div class="main" id="welcome">
+<div class="main login-full-window" id="token">
     <div class="greeting">
         <p>Welcome to Awesome VK App!</p>
     </div>
@@ -50,22 +50,17 @@
                 <p>Enter your vk page details: </p> <br>
                 <input type="text" size="60" name="token_url" placeholder='Paste URL'> <br> <br>
                 <div class="login_form_error text-center pagination-centered">
-                    {% if error_message %}
-                        <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
+                    {% if error_message_token %}
+                        <span class="label label-default ext-center pagination-centered">{{ error_message_token }}</span>
                     {% endif %}
-                </div>
+                </div> <br>
                 <input class="ph-button ph-btn-blue" type="submit" value='Login'>
             </form>
-            <br>
-            <br>
-            <br>
-            <br>
-            <br>
         </div>
     </div>
 </div>
 
-<div class="main login-full-window" id="welcome2">
+<div class="main login-full-window" id="logpass">
     <div class="greeting">
         <p>Welcome to Awesome VK App!</p>
     </div>
@@ -75,20 +70,21 @@
             <form method="post"> {% csrf_token %}
                 <br>
                 <div class="login_form_error text-center pagination-centered">
-                    {% if error_message %}
-                        <span class="label label-default ext-center pagination-centered">{{ error_message }}</span>
+                    {% if error_message_logpass %}
+                        <span class="label label-default ext-center pagination-centered">{{ error_message_logpass }}</span>
                     {% endif %}
-                </div>
+                </div> <br>
                 <input type="text" size="30" name="vk_login" placeholder='Login'> <br>
-                <input type="password" size="30" name="vk_pass" placeholder='Password'>
-                <br>
-                <br>
+                <input type="password" size="30" name="vk_pass" placeholder='Password'> <br>
                 <input class="ph-button ph-btn-blue" type="submit" value='Login'>
             </form>
         </div>
     </div>
 </div>
 <script>
+    if(opendiv) {
+        window.location.hash = '#{{opendiv}}';
+    }
     $(document).on('click', '#animate-scroll', function (event) {
         event.preventDefault();
         $('html, body').animate({
