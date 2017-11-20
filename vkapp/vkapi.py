@@ -26,10 +26,10 @@ def get_auth_params_by_url(redirected_url):
 def get_auth_params_by_login_and_password(login_name, password):
     try:
         session = vk.AuthSession(STANDALONE_APP_ID, login_name, password)
+        api = vk.API(session, lang='en')
+        return session.get_access_token(), api.users.get()[0]['uid'], '0'
     except:
         return None, None, None
-    api = vk.API(session, lang='en')
-    return session.get_access_token(), api.users.get()[0]['uid'], '0'
 
 
 def get_api(access_token):
