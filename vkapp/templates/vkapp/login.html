@@ -69,22 +69,19 @@
         <div class="col-lg-6 col-sm-5 fadeInUp delay-05s">
             <form method="post"> {% csrf_token %}
                 <br>
+                <input  type="text" size="30" name="vk_login" placeholder='Login'> <br>
+                <input type="password" size="30" name="vk_pass" placeholder='Password'> <br>
                 <div class="login_form_error text-center pagination-centered">
                     {% if error_message_logpass %}
-                        <span class="label label-default ext-center pagination-centered">{{ error_message_logpass }}</span>
+                        <br><span class="label label-default ext-center pagination-centered">{{ error_message_logpass }}</span>
                     {% endif %}
                 </div> <br>
-                <input type="text" size="30" name="vk_login" placeholder='Login'> <br>
-                <input type="password" size="30" name="vk_pass" placeholder='Password'> <br>
                 <input class="ph-button ph-btn-blue" type="submit" value='Login'>
             </form>
         </div>
     </div>
 </div>
 <script>
-    if(opendiv) {
-        window.location.hash = '#{{opendiv}}';
-    }
     $(document).on('click', '#animate-scroll', function (event) {
         event.preventDefault();
         $('html, body').animate({
@@ -92,4 +89,7 @@
         }, 650);
     });
 </script>
+{% if opendiv %}
+    <script>window.location.hash = '#{{opendiv}}';</script>
+{% endif %}
 </body>
