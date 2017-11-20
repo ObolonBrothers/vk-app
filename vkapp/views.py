@@ -1,8 +1,25 @@
+import urllib.request
+import os.path
 from django.http import HttpResponseRedirect
 from django.shortcuts import render
 from . import vkapi
 from datetime import datetime, timedelta
 from threading import Thread, Event
+
+
+def download_photo(url, uid, size):
+    local_address = "/static/vkapp/profile_pictures/" + str(uid) + size + ".jpg"
+    if not os.path.exists("./vkapp/" + local_address):
+        urllib.request.urlretrieve(url, "./vkapp/" + local_address)
+    return local_address
+
+
+def cache_photos(user):
+    if 'photo_200' in user:
+        user['photo_200'] = download_photo(user['photo_200'], user['uid'], 'photo_200')
+    if 'photo_max_origs' in user:
+        user['photo_max_origs'] = download_photo(user['photo_max_origs'], user['uid'], 'photo_max_origs')
+    return user
 
 
 def index(request):
@@ -24,7 +41,7 @@ def home(request):
             return logout(request)
 
         user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
-        return render(request, "vkapp/home.html", {'user': user})
+        return render(request, "vkapp/home.html", {'user': cache_photos(user)})
     else:
         return logout(request)
 
@@ -32,13 +49,18 @@ def home(request):
 def login(request):
     if request.method == 'POST':
         if 'token_url' in request.POST:
+            login_type = 'token'
             access_token, user_id, expires_in = vkapi.get_auth_params_by_url(request.POST['token_url'])
         else:
+            login_type = 'logpass'
             access_token, user_id, expires_in = vkapi.get_auth_params_by_login_and_password(
                 request.POST['vk_login'], request.POST['vk_pass'])
+
         if access_token is None or user_id is None or expires_in is None:
-            return render(request, "vkapp/login.html",
-                          {'APP_ID': vkapi.APP_ID, 'error_message': 'Login error, try again!'})
+            return render(request, 'vkapp/login.html',
+                          {'APP_ID': vkapi.APP_ID,
+                           'error_message_' + login_type: 'Login error, try again!',
+                           'opendiv': login_type})
 
         request.session['access_token'] = access_token
         request.session['user_id'] = user_id
@@ -68,7 +90,7 @@ def find_common_friends(request):
         if link1 is None or link2 is None:
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_common_friends.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         link1 = link1.split('/')[-1]
         link2 = link2.split('/')[-1]
@@ -76,14 +98,19 @@ def find_common_friends(request):
         if link1 == '' or link2 == '':
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_common_friends.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         users, common = vkapi.get_common_friends(request.session['access_token'], link1, link2)
 
         if users is None or common is None:
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_common_friends.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
+
+        for i in range(len(users)):
+            users[i] = cache_photos(users[i])
+        for i in range(len(common)):
+            common[i] = cache_photos(common[i])
 
         return render(request, "vkapp/show_common_friends.html",
                       {'user1': users[0], 'user2': users[1], 'common_friends': common, 'common_number': len(common)})
@@ -94,7 +121,7 @@ def find_common_friends(request):
                 return logout(request)
 
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
-            return render(request, "vkapp/find_common_friends.html", {'user': user})
+            return render(request, "vkapp/find_common_friends.html", {'user': cache_photos(user)})
         else:
             return logout(request)
 
@@ -107,7 +134,7 @@ def find_friend_path(request):
         if link1 is None or link2 is None:
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_friend_path.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         link1 = link1.split('/')[-1]
         link2 = link2.split('/')[-1]
@@ -115,17 +142,19 @@ def find_friend_path(request):
         if link1 == '' or link2 == '':
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_friend_path.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         u1, u2, users = vkapi.get_friend_path(request.session['access_token'], link1, link2)
 
         if users is None:
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
             return render(request, "vkapp/find_friend_path.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
+        for i in range(len(users)):
+            users[i] = cache_photos(users[i])
         return render(request, "vkapp/show_friend_path.html",
-                      {'user1': u1, 'user2': u2, 'common_friends': users, 'common_number': len(users)})
+                      {'user1': cache_photos(u1), 'user2': cache_photos(u2), 'common_friends': users, 'common_number': len(users)})
     else:
         if 'token_expire' in request.session:
             if request.session['token_expire'] is None or datetime.now() > datetime.fromtimestamp(
@@ -133,7 +162,7 @@ def find_friend_path(request):
                 return logout(request)
 
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
-            return render(request, "vkapp/find_friend_path.html", {'user': user})
+            return render(request, "vkapp/find_friend_path.html", {'user': cache_photos(user)})
         else:
             return logout(request)
 
@@ -144,24 +173,24 @@ def friends_graph(request):
         link = request.POST['user']
         if link is None:
             return render(request, "vkapp/find_friends_graph.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         link = link.split('/')[-1]
 
         if link == '':
             return render(request, "vkapp/find_friends_graph.html",
-                          {'user': user, 'error_message': 'Wrong details, try again!'})
+                          {'user': cache_photos(user), 'error_message': 'Wrong details, try again!'})
 
         picture_url = vkapi.get_friends_graph(request.session['access_token'], link)
 
         if picture_url is None:
             return render(request, "vkapp/find_friends_graph.html",
-                          {'user': user, 'error_message': 'Bad user!'})
+                          {'user': cache_photos(user), 'error_message': 'Bad user!'})
 
         user = vkapi.get_user(request.session['access_token'], link)[0]
 
         return render(request, "vkapp/show_friends_graph.html",
-                      {'user': user, 'picture_url': picture_url})
+                      {'user': cache_photos(user), 'picture_url': picture_url})
     else:
         if 'token_expire' in request.session:
             if request.session['token_expire'] is None or datetime.now() > datetime.fromtimestamp(
@@ -169,7 +198,7 @@ def friends_graph(request):
                 return logout(request)
 
             user = vkapi.get_user(request.session['access_token'], request.session['user_id'])[0]
-            return render(request, "vkapp/find_friends_graph.html", {'user': user})
+            return render(request, "vkapp/find_friends_graph.html", {'user': cache_photos(user)})
         else:
             return logout(request)
 
@@ -188,25 +217,25 @@ def view_scheduled_comments(request):
 
         if group_domain == '' or date == '' or ptime == '' or comment_text == '':
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'error_message': 'Details error, try again!',
+                          {'user': cache_photos(user), 'error_message': 'Details error, try again!',
                            'comment_threads': vkapi.comment_threads[user['uid']]})
 
         post_time = datetime.strptime(date + ' ' + ptime, "%Y-%m-%d %H:%M")
 
         if (post_time < datetime.now()):
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'error_message': 'Set future time please!',
+                          {'user': cache_photos(user), 'error_message': 'Set future time please!',
                            'comment_threads': vkapi.comment_threads[user['uid']]})
 
         if (post_time - datetime.now()).seconds > 60 * 60 * 5:
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'error_message': 'Too future time!',
+                          {'user': cache_photos(user), 'error_message': 'Too future time!',
                            'comment_threads': vkapi.comment_threads[user['uid']]})
 
         group = vkapi.get_group(request.session['access_token'], group_domain)
         if group is None:
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'error_message': 'Group link error, try again!',
+                          {'user': cache_photos(user), 'error_message': 'Group link error, try again!',
                            'comment_threads': vkapi.comment_threads[user['uid']]})
 
         kill = Event()
@@ -222,7 +251,7 @@ def view_scheduled_comments(request):
             vkapi.comment_threads[user['uid']][i]['id'] = i
 
         return render(request, "vkapp/view_scheduled_comments.html",
-                      {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
+                      {'user': cache_photos(user), 'comment_threads': vkapi.comment_threads[user['uid']]})
     else:
         if 'token_expire' in request.session:
             if request.session['token_expire'] is None or datetime.now() > datetime.fromtimestamp(
@@ -234,7 +263,7 @@ def view_scheduled_comments(request):
                 vkapi.comment_threads[user['uid']] = []
 
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
+                          {'user': cache_photos(user), 'comment_threads': vkapi.comment_threads[user['uid']]})
         else:
             return logout(request)
 
@@ -246,12 +275,12 @@ def delete_comment(request):
 
         if comment_delete_id == '':
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
+                          {'user': cache_photos(user), 'comment_threads': vkapi.comment_threads[user['uid']]})
 
         comment_delete_id = int(comment_delete_id)
         if comment_delete_id < 0 or comment_delete_id >= len(vkapi.comment_threads[user['uid']]):
             return render(request, "vkapp/view_scheduled_comments.html",
-                          {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
+                          {'user': cache_photos(user), 'comment_threads': vkapi.comment_threads[user['uid']]})
 
         vkapi.comment_threads[user['uid']][comment_delete_id]['interrupt'].set()
         del vkapi.comment_threads[user['uid']][comment_delete_id]
@@ -260,6 +289,6 @@ def delete_comment(request):
             vkapi.comment_threads[user['uid']][i]['id'] = i
 
         return render(request, "vkapp/view_scheduled_comments.html",
-                      {'user': user, 'comment_threads': vkapi.comment_threads[user['uid']]})
+                      {'user': cache_photos(user), 'comment_threads': vkapi.comment_threads[user['uid']]})
     else:
         return HttpResponseRedirect("/scheduledcomments")
