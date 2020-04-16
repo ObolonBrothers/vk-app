@@ -1,4 +1,4 @@
-Django==1.10.3
+Django==1.11.28
 matplotlib==1.5.3
 requests==2.12.3
 vk==2.0.2
